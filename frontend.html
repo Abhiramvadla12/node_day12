@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="asc">print in increase price order</button>
+    <button id="desc">print in descreaing price order</button>
+    <div id="output"></div>
+    <script >
+       fetch("http://localhost:3003")
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        
+        const asc = document.getElementById("asc");
+        const desc = document.getElementById("desc");
+        const output = document.getElementById("output");
+        displayResults(result)
+        // Helper function to display results
+        function displayResults(sortedData) {
+          output.innerHTML = ""; // Clear previous results
+          sortedData.forEach((item) => {
+            const p = document.createElement("p");
+            p.textContent = JSON.stringify(item,null,100);
+            output.appendChild(p);
+          });
+        }
+
+        asc.addEventListener("click", (event) => {
+          event.preventDefault();
+          const sortedAsc = [...result].sort((a, b) => a.price - b.price);
+          displayResults(sortedAsc);
+        });
+
+        desc.addEventListener("click", (event) => {
+          event.preventDefault();
+          const sortedDesc = [...result].sort((a, b) => b.price - a.price);
+          displayResults(sortedDesc);
+        });
+      })
+      .catch((error) => console.error("Error:", error));
+            
+    </script>
+</body>
+</html>
